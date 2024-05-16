@@ -3,14 +3,14 @@
 #include <iostream>
 #include <functional>
 
-class Image {
+class RawImage {
 public:
-	Image(const uint16_t rows, const uint16_t columns, const std::function<void(uint8_t*)>& pixelInitializer)
+	RawImage(const uint16_t rows, const uint16_t columns, const std::function<void(uint8_t*)>& pixelInitializer)
 		: m_rows(rows), m_columns(columns) {
 		m_pixels = new uint8_t[m_rows * m_columns];
 		pixelInitializer(m_pixels);
 	}
-	~Image() {
+	~RawImage() {
 		std::cout << "freeing pixel memory.\n";
 		delete[] m_pixels;
 	}
@@ -36,20 +36,11 @@ public:
 	uint8_t* m_pixels; // max 1k x 1k image
 };
 
-class RawImage : public Image
-{
-public:
-    RawImage(const uint16_t rows, const uint16_t columns, const std::function<void(uint8_t*)> pixelInitializer)
-		: Image(rows, columns, pixelInitializer)
-    {
-	}
-};
-
-class BrightenedImage : public Image
+class BrightenedImage : public RawImage
 {
 public:
     BrightenedImage(const uint16_t rows, const uint16_t columns, const std::function<void(uint8_t*)> pixelInitializer)
-		: Image(rows, columns, pixelInitializer)
+		: RawImage(rows, columns, pixelInitializer)
     {
 	}
 };
